@@ -1,0 +1,10 @@
+export const PARTY_GUESTS_URL = 'PARTY_GUESTS_URL';
+export const PARTY_GUESTS = 'PARTY_GUESTS';
+export const ENTER_TO_TABLE = 'ENTER_TO_TABLE';
+export const BOOK_DIETS = 'BOOK_DIETS';
+export const TOTAL_ORDER_PIZZA = 'TOTAL_ORDER_PIZZA';
+export const TOTAL_ORDER_DRINK = 'TOTAL_ORDER_DRINK';
+export const PIZZA_STATS = 'PIZZA_STATS';
+export const DRINK_STATS = 'DRINK_STATS';
+export const ARRAY_ANGLE = 'ARRAY_ANGLE';
+export const LOADING = 'LOADING';

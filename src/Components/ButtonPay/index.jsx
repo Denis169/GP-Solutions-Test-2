@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
 
 const Button = styled.button`
@@ -21,19 +21,11 @@ const ButtonSecond = styled.button`
   color: rgba(0, 0, 0, 0.5);
 `;
 
-const ButtonPay = ({ userPay }) => {
-  const [changePayPaid, setChangePayPaid] = useState(true);
-  const pressButton = () => {
-    setChangePayPaid(false);
-    userPay();
-  };
-
-  return (
-    <>
-      {changePayPaid && <Button onClick={pressButton}>PAY</Button>}
-      {!changePayPaid && <ButtonSecond>PAID</ButtonSecond>}
-    </>
-  );
-};
+const ButtonPay = ({ userPay, changePayPaid }) => (
+  <>
+    {!changePayPaid && <Button onClick={userPay}>PAY</Button>}
+    {changePayPaid && <ButtonSecond>PAID</ButtonSecond>}
+  </>
+);
 
 export default ButtonPay;

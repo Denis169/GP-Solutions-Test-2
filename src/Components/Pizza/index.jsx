@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 
 const Circle = styled.div`
   position: relative;
@@ -7,7 +9,7 @@ const Circle = styled.div`
   border-radius: 50%;
   width: 300px;
   height: 300px;
-  margin: 0 0 70px 70px;
+  margin: 70px 0 70px 70px;
   background-color: #c47f12;
 `;
 
@@ -22,11 +24,15 @@ const Line = styled.div`
   transform: rotate(${(props) => props.angle}deg);
 `;
 
-const Pizza = ({ arrayAngleLine }) => (
-  <Circle>
-    {arrayAngleLine.map((line, index) => (
-      <Line angle={line} key={String(index)} />))}
-  </Circle>
-);
+const Pizza = () => {
+  const arrayAngle = useSelector(createSelector((state) => state.loading.arrayAngle, (data) => data));
+
+  return (
+    <Circle>
+      {arrayAngle.map((line, index) => (
+        <Line angle={line} key={String(index)} />))}
+    </Circle>
+  );
+};
 
 export default Pizza;

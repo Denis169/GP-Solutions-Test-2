@@ -4,12 +4,12 @@ import styled from '@emotion/styled';
 const Loader = styled.div`
   position: absolute;
   top: 285px;
-  left: 160px;
+  left: calc(50% - 100px);
   border: 16px solid #f3f3f3;
   border-top: 16px solid #3498db;
   border-radius: 50%;
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
   animation: spin 2s linear infinite;
 
   @keyframes spin {

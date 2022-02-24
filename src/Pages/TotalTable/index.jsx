@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
+import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import RowOfPizzaEaters from '../../Components/RowOfPizzaEaters';
+import LeaveTheTable from '../../Components/LeaveTheTable';
+import {
+  paymentDrinkActionCreator,
+  paymentPizzaActionCreator,
+} from '../../ActionCreators';
 
 const Table = styled.table`
   margin: 40px 0 40px 70px;
@@ -15,57 +22,56 @@ const Td = styled.td`
   font-size: 20px;
 `;
 
-const TotalTable = ({ peopleWhoEatPizza, totalOrderPizza, totalOrderDrink, allPeopleAtParty }) => {
-  const [paymentPizza, setPaymentPizza] = useState();
-  const [paymentDrink, setPaymentDrink] = useState();
-  const [moneyToCollect, setMoneyToCollect] = useState(+totalOrderPizza + +totalOrderDrink);
-  const [moneyCollected, setMoneyCollected] = useState(0);
+const TotalTable = () => {
+  const dispatch = useDispatch();
+  const peopleWhoEatPizza = useSelector(createSelector((state) => state.loading.bookDiets, (data) => data));
+  const totalOrderPizza = useSelector(createSelector((state) => state.loading.totalOrderPizza, (data) => data));
+  const totalOrderDrink = useSelector(createSelector((state) => state.loading.totalOrderDrink, (data) => data));
+  const partyGuests = useSelector(createSelector((state) => state.loading.partyGuests, (data) => data));
+  const moneyToCollect = useSelector(createSelector((state) => state.totalTable.moneyToCollect, (data) => data));
+  const moneyCollected = useSelector(createSelector((state) => state.totalTable.moneyCollected, (data) => data));
 
   useEffect(() => {
-    setMoneyToCollect((+totalOrderPizza + +totalOrderDrink).toFixed(1));
-    setPaymentPizza((totalOrderPizza / peopleWhoEatPizza.diet.length).toFixed(1));
-    setPaymentDrink((totalOrderDrink / allPeopleAtParty.party.length).toFixed(1));
-  }, [peopleWhoEatPizza, totalOrderPizza, totalOrderDrink]);
+    dispatch(paymentPizzaActionCreator((totalOrderPizza / peopleWhoEatPizza.diet.length).toFixed(1)));
+    dispatch(paymentDrinkActionCreator((totalOrderDrink / partyGuests.length).toFixed(1)));
+  }, []);
 
   return (
-    <Table>
-      <thead>
-        <tr>
-          <Td>Name</Td>
-          <Td>Share to pay</Td>
-          <Td>Pay</Td>
-        </tr>
-      </thead>
-      <tbody>
-        {allPeopleAtParty.party.map((man, index) => (
-          <RowOfPizzaEaters
-            name={man.name}
-            isVegan={man.eatsPizza ? peopleWhoEatPizza.diet.find((person) => person.name === man.name).isVegan : false}
-            payment={man.eatsPizza ? (+paymentPizza + +paymentDrink).toFixed(1) : +paymentDrink}
-            moneyToCollect={moneyToCollect}
-            setMoneyToCollect={setMoneyToCollect}
-            moneyCollected={moneyCollected}
-            setMoneyCollected={setMoneyCollected}
-            key={String(index)}
-          />
-        ))}
-        <tr>
-          <Td>Total order</Td>
-          <Td>{`${(+totalOrderPizza + +totalOrderDrink).toFixed(1)} BYN`}</Td>
-          <Td> </Td>
-        </tr>
-        <tr>
-          <Td>Money to collect</Td>
-          <Td>{`${moneyToCollect} BYN`}</Td>
-          <Td> </Td>
-        </tr>
-        <tr>
-          <Td>Money collected</Td>
-          <Td>{`${moneyCollected} BYN`}</Td>
-          <Td> </Td>
-        </tr>
-      </tbody>
-    </Table>
+    <>
+      <Table>
+        <thead>
+          <tr>
+            <Td>Name</Td>
+            <Td>Share to pay</Td>
+            <Td>Pay</Td>
+          </tr>
+        </thead>
+        <tbody>
+          {partyGuests.map((man, index) => (
+            <RowOfPizzaEaters
+              man={man}
+              key={String(index)}
+            />
+          ))}
+          <tr>
+            <Td>Total order</Td>
+            <Td>{`${(+totalOrderPizza + +totalOrderDrink).toFixed(1)} BYN`}</Td>
+            <Td> </Td>
+          </tr>
+          <tr>
+            <Td>Money to collect</Td>
+            <Td>{`${moneyToCollect} BYN`}</Td>
+            <Td> </Td>
+          </tr>
+          <tr>
+            <Td>Money collected</Td>
+            <Td>{`${moneyCollected} BYN`}</Td>
+            <Td> </Td>
+          </tr>
+        </tbody>
+      </Table>
+      <LeaveTheTable />
+    </>
   );
 };
 
